@@ -1,0 +1,645 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: "Inter" , sans-serif;
+    background-color: #111827;
+    padding-top: 84px; /* chừa chỗ cho header fixed */
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 22px 40px;
+    background-color: #181111;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+.header-left {
+    display: flex;
+    align-items: center;
+}
+.header-content {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 900;
+    color: #ffffff;
+    padding-left: 8px ;
+}
+.header-content-color{
+    color: #e60a15;
+}
+.home {
+    text-decoration: none;
+    color: #ffffff;
+}
+.header-right {
+    display: flex;
+    gap: 36px;
+    color: #D1D5DB;
+    align-items: center;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+}
+.color-header-right {
+    color: #ffffff;
+}
+.btn-login {
+    background-color: #E70814;
+    color:#ffffff ;
+    padding: 9.5px 24px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 
+    0px 4px 6px -4px rgba(231, 8, 20, 0.3), 
+    0px 10px 15px -3px rgba(231, 8, 20, 0.3);
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 21px;
+    cursor: pointer;
+}
+.btn-login:hover {
+    background-color: #c40610; 
+}
+.hero-section{
+    position: relative;
+}
+.background-container {
+    width: 100%;
+    margin-top: 0;
+    height: 100vh; /* full màn (body đã padding-top) */
+    min-height: 720px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative; /* neo overlay đúng trong hero */
+}
+.background-container::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(17,24,39,0.82) 0%, rgba(17,24,39,0.62) 45%, rgba(17,24,39,0.08) 100%),
+      linear-gradient(180deg, rgba(17,24,39,0.05) 0%, rgba(17,24,39,0.78) 100%);
+    pointer-events: none;
+}
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 220px 120px;
+    width: 672px;
+    height: 380px;
+    z-index: 2;
+    /* làm mốc để đặt countdown ở góc trái */
+}
+.tag-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px ;
+    background-color: #E60A151A ;
+    border: 1px solid #E60A154D;
+    width: 137.5px;
+    height: 26px;
+    border-radius: 9999px;
+}
+.tag-container-content {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    color: #E60A15;
+}
+.heading-1 {
+    font-weight: 900;
+    font-size: 72px;
+    line-height: 72px;
+    letter-spacing: -1.8px;
+    color: #ffffff ;
+    margin: 16px auto;
+}
+.content-container {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 32.5px;
+    color: #D1D5DB;
+    margin: 20px auto;
+}
+.button-container {
+    display: flex;
+    gap: 16px;
+}
+.button-ctn-1 {
+    background-color: #E60A15;
+    height: 48px;
+    width: 188.34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+}
+.content-btn-1 {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    vertical-align: middle;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+.button-cnt-2 {
+    background-color: #00000066;
+    border: 1px solid #4B5563;
+    height: 48px;
+    width: 188.34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+}
+.content-btn-2{
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+}
+.block-1{
+    margin: 64px 120px;
+}
+.heading-block-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.heading-2 {
+    color: #FFFFFF;
+    font-size: 30px;
+    line-height: 36px;
+    letter-spacing: -0.75px;
+    font-weight: 700;
+    text-align: center;
+}
+.view-all {
+    color: #E60A15 ;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+    cursor: pointer;
+    user-select: none;
+}
+.view-all:hover{
+    color: #ff2d2d;
+    text-decoration: underline;
+}
+.view-all img{
+    width: 14px;
+    height: 14px;
+}
+.block-movie {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+    margin-top: 32px;
+    padding: 0;
+    width: 100%;
+}
+.one-block-movie {
+    background-color: #1f2937;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    height: 560px;
+    width: 100%;
+    overflow: hidden;
+}
+.one-block-movie img{
+    width: 100%;
+    height: 390px;
+    object-fit: cover;
+    display: block;
+}
+.one-block-movie:hover{
+    transform: translateY(-5px); 
+    background-color: #374151; 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border-color: #4b5563;
+}
+.content-block-movie {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: calc(560px - 390px); /* phần nội dung dưới poster */
+}
+.title-movie {
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 0;
+    line-height: 1.25;
+    min-height: 44px; /* cố định để thẳng hàng */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.content-movie {
+    color: #9ca3af;
+    font-size: 14px;
+    min-height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.button-movie {
+    width: 100%;
+    border: none;
+    color: #ff2d2d;
+    background-color: #472330;
+    padding: 10px 12px;
+    margin-top: auto; /* đẩy nút xuống đáy card để thẳng hàng */
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+}
+.button-movie:hover{
+    background-color: #5a2a3a;
+}
+.fa-regular {
+    margin-right: 8px;
+}
+.endow-block {
+    text-align: center;
+    background-color: #151d2e;
+    padding: 60px 0;
+}
+.style-block-endow {
+    margin: 120px;
+}
+.endow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+}
+.content-heading {
+    margin: 25px 0;
+    color: #9CA3AF;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+}
+.one-block-endow {
+    padding: 24px;
+    border: 1px solid #374151;
+    background-color: #1f2937;
+    border-radius: 8px;
+    width: 100%;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+.one-block-endow:hover{
+    transform: translateY(-5px); 
+    background-color: #374151; 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border-color: #4b5563;
+}
+.heading-3 {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: #FFFFFF;
+    margin: 8px 0;
+}
+.content-endow {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #9CA3AF;
+}
+.view-endow {
+    margin-top: 20px;
+    color: #E60A15;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+}
+.icon-block {
+    margin-bottom: 8px;
+}
+.background-register {
+    background-color: #1F2937;
+}
+.register-member {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 120px 120px 20px 120px;
+    padding: 56px 0;
+}
+.content-child-register {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: #9CA3AF;
+    margin-top: 10px;
+}
+.input-email-register {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.subscribe-form{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    max-width: 420px;
+}
+.subscribe-row{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.form-error{
+    min-height: 16px;
+    font-size: 12px;
+    color: #ff2d2d;
+}
+.input-child-email{
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #374151;
+    padding: 10px 13px;
+    background-color: #111827;
+    color: #ffffff;
+}
+.input-child-email::placeholder{
+    color: #6b7280;
+    font-weight: 400;
+}
+.btn-input-email{
+    height: 40px;
+    border-radius: 4px ;
+    background-color: #E60A15;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    vertical-align: middle;
+    padding: 10px 15px;
+}
+.footer-index {
+    display: flex;
+    justify-content: space-between;
+    padding: 50px;
+    align-items: center;
+    border-top: 2px solid #1F2937;
+}
+.content-footer-index{
+    display: flex;
+    gap: 32px;
+    color: #9CA3AF;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    align-items: center;
+}
+.all-icon-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.rights {
+    color: #9CA3AF;
+    padding: 32px 0;
+    margin: 0 120px;
+    border-top: 2px solid #1F2937;
+    text-align: center;
+}
+.logout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.logout-modal {
+  width: min(92vw, 420px);
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid #22314a;
+  background: #0f1b2f;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+.logout-title {
+  margin: 0 0 10px;
+  font-size: 30px;
+  color: #f8fafc;
+}
+
+.logout-message {
+  margin: 0 0 20px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #d6deea;
+}
+
+.logout-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.logout-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  border: 1px solid #41546f;
+  background: transparent;
+}
+
+.ok-btn {
+  background: #e70814;
+}
+
+/* ====== Home: trailer modal ====== */
+
+.trailer-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.65);
+}
+.trailer-modal {
+  width: min(980px, 96vw);
+  border-radius: 14px;
+  background: #0b1220;
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+.trailer-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+}
+.trailer-modal-title {
+  color: #f8fafc;
+  font-weight: 700;
+  font-size: 16px;
+}
+.trailer-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(75, 85, 99, 0.65);
+  background: transparent;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+.trailer-modal-body {
+  background: #000;
+}
+.trailer-iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  display: block;
+}
+.trailer-empty {
+  padding: 22px 16px;
+  color: #d1d5db;
+  background: #0b1220;
+}
+
+/* ====== Home: carousel phim hot (không hiển thị suất chiếu) ====== */
+.hero-carousel {
+  position: absolute;
+  left: 50%;
+  bottom: 26px; /* nằm giữa ảnh, sát phía dưới */
+  transform: translateX(-50%);
+  width: min(520px, 92vw);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  pointer-events: none; /* tránh che click vùng hero */
+}
+.hero-nav {
+  position: static;
+  transform: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(75, 85, 99, 0.55);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.hero-nav.prev { }
+.hero-nav.next { }
+.hero-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0;
+  pointer-events: auto;
+}
+.hero-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(156, 163, 175, 0.65);
+  background: transparent;
+  cursor: pointer;
+}
+.hero-dot.active {
+  background: #e60a15;
+  border-color: #e60a15;
+}
+
+/* Title dài (vd Dune: Part Two) không bị tràn */
+.heading-1 {
+  max-width: min(720px, 92vw);
+  word-break: break-word;
+}
+
+/* Countdown cho phim hot (hero) */
+.hot-countdown{
+    position: absolute;
+    right: 120px;   /* canh về góc phải (vùng khoanh đỏ) */
+    bottom: 120px;  /* lùi lên khỏi đáy ảnh một chút */
+    top: auto;
+    padding: 16px 18px;
+    width: fit-content;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.32);
+    border: 1px solid rgba(75, 85, 99, 0.65);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.28);
+    z-index: 3;
+}
+.hot-countdown-label{
+    color: #9ca3af;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 6px;
+}
+.hot-countdown-value{
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: 0.4px;
+}
+
+.button-ctn-1,
+.button-cnt-2 {
+  cursor: pointer;
+  border: none;
+}
+.button-cnt-2 {
+  background-color: #00000066;
+}
+.button-ctn-1:hover { background-color: #c40610; }
+.button-cnt-2:hover { background-color: rgba(0, 0, 0, 0.5); }
+
+.btn-input-email {
+  border: none;
+  cursor: pointer;
+}
+.btn-input-email:hover { background-color: #c40610; }
+

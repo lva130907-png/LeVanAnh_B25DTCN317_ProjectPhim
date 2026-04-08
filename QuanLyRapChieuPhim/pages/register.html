@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Ký Tài Khoản</title>
+    <link rel="stylesheet" href="../css/register.css" />
+    <link rel="stylesheet" href="../css/reponsive.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-left">
+        <img src="../assets/icons/login/icon-login.png" alt="icon" />
+        <div class="header-content">Rikkei <span class="header-content-color">Cinema</span></div>
+      </div>
+      <div class="header-right">
+        <div><a class="home" href="./index.html">Trang chủ</a></div>
+        <div>Thông tin</div>
+        <div>Liên hệ</div>
+        <div><a href="./login.html"><button class="btn-login">Đăng nhập</button></a></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <form class="box" id="register-form">
+        <div class="box-content">
+          <div class="welcome">Tạo tài khoản mới</div>
+          <div class="content-box">Đăng ký để đặt vé xem phim ngay hôm nay</div>
+          <br /><br />
+
+          <div class="decor-text">Họ và tên</div>
+          <input id="fullname-input" class="input" type="text" placeholder="Nguyễn Văn A" />
+          <small id="fullname-error" class="field-error"></small>
+
+          <div class="decor-text">Email</div>
+          <input id="email-input" class="input" type="text" placeholder="email@example.com" />
+          <small id="email-error" class="field-error"></small>
+
+          <div class="icon-pass">
+            <div class="decor-text">Mật khẩu</div>
+            <div class="input-group">
+              <input id="password-input" class="input" type="password" placeholder="******" />
+              <img class="toggle-password-btn" src="../assets/icons/register/iconeye.png" alt="icon pass" />
+            </div>
+            <small id="password-error" class="field-error"></small>
+          </div>
+
+          <div class="icon-pass">
+            <div class="decor-text">Xác nhận mật khẩu</div>
+            <div class="input-group">
+              <input id="confirm-password-input" class="input" type="password" placeholder="******" />
+              <img class="toggle-password-btn" src="../assets/icons/register/iconeye.png" alt="icon pass" />
+            </div>
+            <small id="confirm-password-error" class="field-error"></small>
+          </div>
+
+          <div class="note">
+            <div class="checkbox">
+              <input id="terms-checkbox" type="checkbox" />
+              Tôi đồng ý với <span class="term">điều khoản sử dụng</span> và chính sách bảo mật của CineEdu
+            </div>
+          </div>
+          <small id="terms-error" class="field-error"></small>
+
+          <button class="btn-login-2" type="submit">
+            Đăng ký <img src="../assets/icons/login/icon-login-2.png" alt="icon" />
+          </button>
+
+          <br />
+
+          <div class="account">
+            Đã có tài khoản ?
+            <span><a class="register" href="./login.html">Đăng nhập ngay</a></span>
+          </div>
+        </div>
+      </form>
+
+      <br /><br />
+      <div class="source">© 2026 RikkeiEdu. Tất cả quyền được bảo mật.</div>
+    </section>
+
+    <div id="toast-container"></div>
+    <script src="../js/register.js"></script>
+  </body>
+</html>

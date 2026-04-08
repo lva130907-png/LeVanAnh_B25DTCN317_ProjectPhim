@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rikkei Cinema Admin - Quản lý Phim</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/reponsive.css">
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <div>
+      <div class="logo">
+        <img src="../assets/icons/admin/iconRikkeiCinema.png" alt="">
+        <span><span class="logo1">Rikkei</span><span class="logo2"> Cinema</span></span>
+      </div>
+
+      <div class="tabs">
+        <div class="tab tab-select" onclick="switchTab(0)">
+          <i class="fa-solid fa-clapperboard"></i>
+          <span>Quản lý phim</span>
+        </div>
+        <div class="tab" onclick="switchTab(1)">
+          <i class="fas fa-ticket"></i>
+          <span>Quản lý vé</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer" onclick="showLogoutModal()">
+      <img src="../assets/images/Image+Border.png" alt="Admin">
+      <div class="admin-info">
+        <div class="admin-name">Admin Quản Lý</div>
+        <div class="admin-email">LQTuan@rikkei.edu.vn</div>
+      </div>
+      <i class="fas fa-arrow-right-from-bracket" style="margin-left: auto; color: #999;"></i>
+    </div>
+  </div>
+  <main>
+
+    <div id="movieTab">
+
+      <div class="content-header">
+        <div class="header-left">
+          <h1>Quản lý danh sách phim</h1>
+          <p>Xem, chỉnh sửa và quản lý tất cả phim hiện có trên hệ thống.</p>
+        </div>
+        <div class="actions">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Tìm phim..." onkeyup="searchMovies(this.value)">
+          </div>
+          <button class="btn-add" onclick="openAddModal()">
+            <i class="fas fa-plus"></i> Thêm phim mới
+          </button>
+        </div>
+      </div>
+
+      <div class="filter">
+        <button class="active" onclick="filterMovies('all', this)">Tất cả (<span id="countAll">24</span>)</button>
+        <button onclick="filterMovies('Đang chiếu', this)">Đang chiếu (<span id="countShowing">8</span>)</button>
+        <button onclick="filterMovies('Sắp chiếu', this)">Sắp chiếu (<span id="countComing">5</span>)</button>
+        <button onclick="filterMovies('Đã chiếu', this)">Đã chiếu (<span id="countEnded">11</span>)</button>
+      </div>
+
+      <div class="table-wrapper">
+        <div class="table-container" id="tableContainer"></div>
+
+        <div class="pagination-footer">
+          <div class="pagination-info">
+            Hiển thị <strong id="itemStart">1</strong>-<strong id="itemEnd">5</strong> trên <strong
+              id="totalItems">24</strong> phim
+          </div>
+          <div class="pagination-controls" id="paginationControls"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="ticketTab" style="display: none;">
+      <div class="content-header ticket-header-row">
+        <div class="header-left">
+          <h1>Quản lý vé đã đặt</h1>
+        </div>
+        <div class="actions ticket-actions">
+          <div class="search-box ticket-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="ticketSearchInput" placeholder="Tìm kiếm mã vé, tên khách...">
+          </div>
+          <i class="fa-regular fa-bell ticket-bell"></i>
+        </div>
+      </div>
+
+      <div class="ticket-stats-row">
+        <div class="ticket-stat-card">
+          <div class="ticket-stat-label">Tổng vé hôm nay</div>
+          <div class="ticket-stat-num" id="statTicketsToday">0</div>
+          <div class="ticket-stat-sub ok">+12% so với hôm qua</div>
+        </div>
+        <div class="ticket-stat-card">
+          <div class="ticket-stat-label">Doanh thu ngày</div>
+          <div class="ticket-stat-num" id="statRevenueToday">0₫</div>
+          <div class="ticket-stat-sub ok">+5% so với mục tiêu</div>
+        </div>
+        <div class="ticket-stat-card">
+          <div class="ticket-stat-label">Vé chờ xác nhận</div>
+          <div class="ticket-stat-num" id="statPendingTickets">0</div>
+          <div class="ticket-stat-sub warn">⚠ Cần xử lý ngay</div>
+        </div>
+      </div>
+
+      <div class="ticket-btn-row">
+        <button class="btn-add" type="button" onclick="openAddTicketModal()">
+          <i></i> Đặt vé
+        </button>
+      </div>
+
+      <div class="table-wrapper">
+        <div class="table-container" id="ticketTableContainer"></div>
+        <div class="pagination-footer">
+          <div class="pagination-info">
+            Đang xem <strong id="ticketItemStart">1</strong> đến <strong id="ticketItemEnd">5</strong>
+            trong số <strong id="ticketTotalItems">0</strong> kết quả
+          </div>
+          <div class="pagination-controls" id="ticketPaginationControls"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal" id="addModal">
+    <div class="modal-container add-modal">
+      <div class="modal-header">
+        <h2>Thêm Phim Mới</h2>
+        <button class="close-btn" onclick="closeAddModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Tên phim <span style="color: #ff2d2d;">*</span></label>
+          <input type="text" id="addName" placeholder="Nhập tên phim">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Thể loại <span style="color: #ff2d2d;">*</span></label>
+            <input type="text" id="addGenre" placeholder="Ví dụ: Hành động, Kinh dị">
+          </div>
+          <div class="form-group">
+            <label>Thời lượng (phút) <span style="color: #ff2d2d;">*</span></label>
+            <input type="number" id="addDuration" placeholder="Ví dụ: 120" min="1">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ngày khởi chiếu <span style="color: #ff2d2d;">*</span></label>
+            <input type="date" id="addDate">
+          </div>
+          <div class="form-group">
+            <label>Trạng thái <span style="color: #ff2d2d;">*</span></label>
+            <select id="addStatus">
+              <option value="">-- Chọn trạng thái --</option>
+              <option value="Đang chiếu">Đang chiếu</option>
+              <option value="Sắp chiếu">Sắp chiếu</option>
+              <option value="Đã chiếu">Đã chiếu</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Giá vé (VNĐ) <span style="color: #ff2d2d;">*</span></label>
+          <input type="number" id="addPrice" placeholder="Nhập giá vé...." min="1">
+        </div>
+
+        <div class="form-group">
+          <label>URL Ảnh bìa <span style="color: #ff2d2d;">*</span></label>
+          <input type="text" id="addPoster" placeholder="https://... hoặc ../assets/images/...">
+        </div>
+
+        <div class="form-group">
+          <label>Mô tả ngắn <span style="color: #ff2d2d;">*</span></label>
+          <textarea id="addDesc" placeholder="Nhập tóm tắt nội dung phim..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeAddModal()">Hủy</button>
+        <button class="btn-submit" onclick="addMovie()"><i class="fas fa-plus"></i> Thêm mới</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="editModal">
+    <div class="modal-container edit-modal">
+      <div class="modal-header">
+        <h2>Cập Nhật Thông Tin Phim</h2>
+        <button class="close-btn" onclick="closeEditModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tên phim</label>
+            <input type="text" id="editName" value="Dune: Hành Tinh Cát - Phần 2">
+          </div>
+          <div class="form-group">
+            <label>Thể loại <span style="color: #ff2d2d;">*</span></label>
+            <input type="text" id="editGenre" placeholder="Hành động, Viễn tưởng">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Thời lượng (phút)</label>
+            <input type="number" id="editDuration" value="168">
+          </div>
+          <div class="form-group">
+            <label>Ngày khởi chiếu</label>
+            <input type="date" id="editDate" value="2024-03-01">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mô tả ngắn <span style="color: #ff2d2d;">*</span></label>
+          <textarea id="editDesc"
+            rows="4">Tiếp nối câu chuyện của phần trước, Paul Atreides hợp nhất với người Fremen để trả thù những kẻ đã hủy diệt gia tộc anh...</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>URL Ảnh bìa <span style="color: #ff2d2d;">*</span></label>
+          <input type="text" id="editPoster" placeholder="https://... hoặc ../assets/images/...">
+        </div>
+
+        <div class="form-group">
+          <label>Trạng thái</label>
+          <select id="editStatus">
+            <option>Đã chiếu</option>
+            <option>Đang chiếu</option>
+            <option>Sắp chiếu</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Giá vé</label>
+          <input type="text" id="editPrice" value="90.000 VNĐ">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeEditModal()">Hủy</button>
+        <button class="btn-submit" onclick="updateMovie()"><i class="fas fa-check"></i> Cập nhật</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="validationModal">
+    <div class="modal-container validation-modal">
+      <div class="modal-header error-header">
+        <h2><i class="fas fa-exclamation-circle"></i> Lỗi Xác Thực</h2>
+        <button class="close-btn" onclick="closeValidationModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <ul class="validation-errors" id="validationErrors"></ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-submit" onclick="closeValidationModal()"><i class="fas fa-check"></i> Đã hiểu</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="deleteModal">
+    <div class="modal-container delete-modal">
+
+      <div class="delete-body">
+        <div class="delete-content">
+
+          <div class="delete-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+
+          <h2>Xác nhận xóa phim</h2>
+
+          <p>
+            Bạn có chắc chắn muốn xóa phim
+            <strong id="deleteMovieName">"Dune: Hành Tinh Cát"</strong>
+            không? Hành động này không thể hoàn tác.
+          </p>
+
+        </div>
+      </div>
+
+      <div class="delete-footer">
+        <button class="btn-cancel-delete" onclick="closeDeleteModal()">Hủy</button>
+        <button class="btn-delete" onclick="confirmDeleteMovie()">
+          Xóa ngay
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal thêm vé -->
+  <div class="modal" id="addTicketModal">
+    <div class="modal-container add-modal ticket-modal">
+      <div class="modal-header">
+        <h2>Thêm Mới Đặt Vé</h2>
+        <button class="close-btn" onclick="closeAddTicketModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Chọn khách hàng <span style="color:#ff2d2d">*</span></label>
+          <select id="ticketAddCustomer">
+            <option value="">-- Chọn khách --</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Chọn phim <span style="color:#ff2d2d">*</span></label>
+            <select id="ticketAddMovie" onchange="onTicketAddMovieChange()">
+              <option value="">-- Phim đang chiếu --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Chọn suất chiếu <span style="color:#ff2d2d">*</span></label>
+            <select id="ticketAddShow">
+              <option value="">-- Chọn suất --</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Chọn ghế <span style="color:#ff2d2d">*</span></label>
+          <input type="text" id="ticketAddSeats" placeholder="F12, F13" oninput="updateTicketAddTotal()">
+          <p class="ticket-hint">Phân cách các ghế bằng dấu phẩy</p>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phương thức thanh toán <span style="color:#ff2d2d">*</span></label>
+            <select id="ticketAddPayMethod">
+              <option value="0">Tiền mặt</option>
+              <option value="1">Chuyển khoản</option>
+              <option value="2">Thẻ ngân hàng</option>
+              <option value="3">Ví điện tử</option>
+              <option value="4">Khác</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Trạng thái thanh toán <span style="color:#ff2d2d">*</span></label>
+            <select id="ticketAddPayStatus" onchange="updateTicketAddTotal()">
+              <option value="1">Đã thanh toán</option>
+              <option value="0">Chưa thanh toán</option>
+            </select>
+          </div>
+        </div>
+        <div class="ticket-total-box">
+          <div>
+            <div class="ticket-total-label">TỔNG TIỀN DỰ KIẾN</div>
+            <div class="ticket-total-big" id="ticketAddTotalPreview">0 đ</div>
+          </div>
+          <div class="ticket-total-side">
+            <span id="ticketAddSeatBreakdown">0 vé x 0 đ</span><br>
+            <span class="muted">Đã bao gồm VAT</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeAddTicketModal()">Hủy</button>
+        <button class="btn-submit" onclick="saveNewTicket()"><i class="fas fa-check"></i> Xác nhận đặt vé</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal sửa vé -->
+  <div class="modal" id="editTicketModal">
+    <div class="modal-container edit-modal ticket-modal">
+      <div class="modal-header">
+        <h2>Cập Nhật Thông Tin Vé <span id="editTicketCodeTitle" class="ticket-code-inline"></span></h2>
+        <button class="close-btn" onclick="closeEditTicketModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="ticketEditId">
+        <div class="form-group">
+          <label>Khách hàng</label>
+          <input type="text" id="ticketEditCustomer" readonly class="input-readonly">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phim</label>
+            <select id="ticketEditMovie" onchange="onTicketEditMovieChange()">
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Suất chiếu</label>
+            <select id="ticketEditShow"></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Vị trí ghế <span style="color:#ff2d2d">*</span></label>
+          <input type="text" id="ticketEditSeats" oninput="updateTicketEditTotal()">
+        </div>
+        <div class="form-group">
+          <label>Trạng thái thanh toán</label>
+          <select id="ticketEditPayStatus" onchange="onTicketEditPayStatusChange()">
+            <option value="1">Đã thanh toán</option>
+            <option value="0">Chưa thanh toán</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ghi chú</label>
+          <textarea id="ticketEditNote" rows="3" placeholder="Nhập ghi chú của admin..."></textarea>
+        </div>
+        <div class="ticket-total-box ticket-total-box-edit">
+          <span>Tổng số ghế: <strong id="ticketEditSeatCount">0</strong></span>
+          <span>Tổng tiền thanh toán <strong class="ticket-total-big-inline" id="ticketEditTotalPreview">0đ</strong></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeEditTicketModal()">Hủy</button>
+        <button class="btn-submit" onclick="saveEditTicket()"><i class="fas fa-check"></i> Lưu thay đổi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal hủy vé -->
+  <div class="modal" id="cancelTicketModal">
+    <div class="modal-container delete-modal" style="max-width:420px;">
+      <div class="delete-body">
+        <div class="delete-content">
+          <div class="delete-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <h2>Xác nhận hủy vé</h2>
+          <p>Bạn có chắc chắn muốn hủy vé mã <strong id="cancelTicketCodeText"></strong> không?</p>
+          <p class="muted-small">Hành động này sẽ giải phóng ghế ngồi và không thể hoàn tác.</p>
+        </div>
+      </div>
+      <div class="delete-footer">
+        <button class="btn-cancel-delete" onclick="closeCancelTicketModal()">Đóng</button>
+        <button class="btn-delete" onclick="confirmCancelTicket()">Xác nhận hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="logoutModal" class="modal">
+    <div class="modal-container" style="max-width: 300px;">
+      <div class="modal-header">
+        <h2><i class="fas fa-sign-out-alt"></i> Đăng xuất</h2>
+        <button class="close-btn" onclick="hideLogoutModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="margin-bottom: 20px;">Bạn có chắc muốn đăng xuất khỏi hệ thống?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="hideLogoutModal()">Hủy</button>
+        <button class="btn-submit" onclick="logout()">Đăng xuất</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="../js/seed-movies.js"></script>
+  <script src="../js/admin.js"></script>
+
+</body>
+
+</html>

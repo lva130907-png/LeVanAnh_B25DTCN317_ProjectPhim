@@ -1,0 +1,270 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("../assets/images/baaf5bbe2cf6344e9a5fb9af666fa17f2aaf9986\ \(1\).png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 22px 40px;
+  background-color: #181111;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-content {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 900;
+  color: #ffffff;
+  padding-left: 8px;
+}
+
+.header-content-color {
+  color: #e60a15;
+}
+
+.home {
+  text-decoration: none;
+  color: #cbd5e1;
+}
+
+.header-right {
+  display: flex;
+  gap: 36px;
+  color: #cbd5e1;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.btn-login {
+  background-color: #e70814;
+  color: #ffffff;
+  padding: 9.5px 24px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0px 4px 6px -4px rgba(231, 8, 20, 0.3), 0px 10px 15px -3px rgba(231, 8, 20, 0.3);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 21px;
+  cursor: pointer;
+}
+
+.btn-login:hover {
+  background-color: #c40610;
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.box {
+  margin: 100px 0 0 0;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+}
+
+.content-box {
+  text-align: center;
+  color: #94a3b8;
+  margin-top: 8px;
+}
+
+.welcome {
+  color: white;
+  font-weight: 750;
+  font-size: 30px;
+  line-height: 36px;
+  text-align: center;
+}
+
+.box-content {
+  padding: 12px 32px;
+}
+
+.decor-text {
+  color: #e2e8f0;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 8px;
+}
+
+.input {
+  border: 2px solid #1e293b;
+  padding: 14px 17px;
+  width: 100%;
+  border-radius: 8px;
+  outline: none;
+  background-color: #172030;
+  color: #94a3b8;
+  transition: border-color 0.3s ease;
+}
+
+.input::placeholder {
+  color: #94a3b8;
+}
+
+.input-group {
+  position: relative;
+  width: 100%;
+}
+
+.input-group .input {
+  width: 100%;
+  padding: 14px 45px 14px 17px;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  width: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.toggle-password-btn:hover {
+  opacity: 1;
+}
+
+.btn-login-2 {
+  display: flex;
+  width: 100%;
+  padding: 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  background-color: #e70814;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  box-shadow: 0px 4px 6px -4px rgba(231, 8, 20, 0.3), 0px 10px 15px -3px rgba(231, 8, 20, 0.3);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-login-2:hover {
+  background-color: #c40610;
+}
+
+.note {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #cbd5e1;
+  align-items: center;
+}
+
+.checkbox {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#terms-checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #48628b;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  background-color: #334155;
+  flex-shrink: 0;
+}
+
+#terms-checkbox:checked {
+  background-color: #94a3b8;
+}
+
+#terms-checkbox:checked::after {
+  content: "✔";
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.term {
+  color: #e60a15;
+}
+
+.account {
+  color: #bb9b9c;
+  text-align: center;
+  padding: 10px;
+}
+
+.register {
+  text-decoration: none;
+  font-weight: 700;
+  color: #e70814;
+}
+
+.register:hover {
+  text-decoration: underline;
+}
+
+.source {
+  color: #9ca3af;
+  margin-bottom: 120px;
+}
+
+/* Error text */
+.field-error {
+  display: block;
+  min-height: 18px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  color: #ff3b30;
+  font-size: 13px;
+}
+
+.input.input-error {
+  border-color: #ff3b30;
+}
+
+/* Toast dùng chung ở css/toast.css */
