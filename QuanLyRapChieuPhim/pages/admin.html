@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
   <link rel="stylesheet" href="../css/admin.css">
   <link rel="stylesheet" href="../css/reponsive.css">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 </head>
 
 <body>
@@ -303,7 +306,7 @@
 
   <!-- Modal thêm vé -->
   <div class="modal" id="addTicketModal">
-    <div class="modal-container add-modal ticket-modal">
+    <div class="modal-container add-modal ticket-modal ticket-add-modal">
       <div class="modal-header">
         <h2>Thêm Mới Đặt Vé</h2>
         <button class="close-btn" onclick="closeAddTicketModal()">&times;</button>
@@ -311,46 +314,65 @@
       <div class="modal-body">
         <div class="form-group">
           <label>Chọn khách hàng <span style="color:#ff2d2d">*</span></label>
-          <select id="ticketAddCustomer">
-            <option value="">-- Chọn khách --</option>
-          </select>
+          <div class="ticket-input-wrap">
+            <i class="fa-regular fa-user"></i>
+            <select id="ticketAddCustomer">
+              <option value="">Tìm kiếm tên hoặc SĐT...</option>
+            </select>
+          </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>Chọn phim <span style="color:#ff2d2d">*</span></label>
-            <select id="ticketAddMovie" onchange="onTicketAddMovieChange()">
-              <option value="">-- Phim đang chiếu --</option>
-            </select>
+            <div class="ticket-input-wrap">
+              <i class="fa-solid fa-clapperboard"></i>
+              <select id="ticketAddMovie" onchange="onTicketAddMovieChange()">
+                <option value="">Chọn phim đang chiếu...</option>
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <label>Chọn suất chiếu <span style="color:#ff2d2d">*</span></label>
-            <select id="ticketAddShow">
-              <option value="">-- Chọn suất --</option>
-            </select>
+            <div class="ticket-input-wrap">
+              <i class="fa-regular fa-calendar"></i>
+              <select id="ticketAddShow">
+                <option value="">Chọn Suất</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="form-group">
           <label>Chọn ghế <span style="color:#ff2d2d">*</span></label>
-          <input type="text" id="ticketAddSeats" placeholder="F12, F13" oninput="updateTicketAddTotal()">
+          <div class="ticket-input-wrap">
+            <i class="fa-solid fa-couch"></i>
+            <input type="text" id="ticketAddSeats" placeholder="F5, F6" oninput="updateTicketAddTotal()">
+          </div>
           <p class="ticket-hint">Phân cách các ghế bằng dấu phẩy</p>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>Phương thức thanh toán <span style="color:#ff2d2d">*</span></label>
-            <select id="ticketAddPayMethod">
-              <option value="0">Tiền mặt</option>
-              <option value="1">Chuyển khoản</option>
-              <option value="2">Thẻ ngân hàng</option>
-              <option value="3">Ví điện tử</option>
-              <option value="4">Khác</option>
-            </select>
+            <div class="ticket-input-wrap">
+              <i class="fa-regular fa-credit-card"></i>
+              <select id="ticketAddPayMethod">
+                <option value="">-- Chọn phương thức --</option>
+                <option value="0">Tiền mặt</option>
+                <option value="1">Chuyển khoản</option>
+                <option value="2">Thẻ ngân hàng</option>
+                <option value="3">Ví điện tử</option>
+                <option value="4">Khác</option>
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <label>Trạng thái thanh toán <span style="color:#ff2d2d">*</span></label>
-            <select id="ticketAddPayStatus" onchange="updateTicketAddTotal()">
-              <option value="1">Đã thanh toán</option>
-              <option value="0">Chưa thanh toán</option>
-            </select>
+            <div class="ticket-input-wrap">
+              <i class="fa-regular fa-circle-check"></i>
+              <select id="ticketAddPayStatus" onchange="updateTicketAddTotal()">
+                <option value="1">Đã thanh toán</option>
+                <option value="0">Chưa thanh toán</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="ticket-total-box">
