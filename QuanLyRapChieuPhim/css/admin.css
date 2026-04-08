@@ -1068,6 +1068,103 @@ main {
   max-width: 560px;
 }
 
+.ticket-add-modal {
+  max-width: 720px;
+  border: 1px solid rgba(255, 56, 76, 0.25);
+  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.55);
+}
+
+.ticket-add-modal .modal-header {
+  background: linear-gradient(180deg, rgba(35, 14, 16, 0.95), rgba(26, 15, 15, 0.95));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ticket-add-modal .modal-header h2 {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.ticket-add-modal .modal-body {
+  padding: 22px 24px 18px;
+}
+
+.ticket-add-modal .modal-footer {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ticket-add-modal .form-group {
+  margin-bottom: 14px;
+}
+
+.ticket-add-modal .form-group label {
+  color: #e5e7eb;
+  font-size: 14px;
+  margin-bottom: 7px;
+}
+
+.ticket-input-wrap {
+  position: relative;
+}
+
+.ticket-input-wrap i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.ticket-input-wrap input,
+.ticket-input-wrap select {
+  width: 100%;
+  height: 42px;
+  border-radius: 10px;
+  background: #251618;
+  border: 1px solid #5a2a30;
+  color: #f3f4f6;
+  padding: 10px 12px 10px 36px;
+}
+
+.ticket-input-wrap input::placeholder {
+  color: #8d8d8d;
+}
+
+.ticket-add-modal .ticket-hint {
+  color: #9ca3af;
+  margin-top: 7px;
+}
+
+.ticket-add-modal .ticket-total-box {
+  background: linear-gradient(90deg, rgba(130, 11, 22, 0.38), rgba(108, 10, 18, 0.2));
+  border: 1px solid rgba(255, 56, 76, 0.3);
+  border-radius: 12px;
+  margin-top: 12px;
+  padding: 18px;
+}
+
+.ticket-add-modal .ticket-total-label {
+  color: #fda4af;
+  font-size: 12px;
+}
+
+.ticket-add-modal .ticket-total-big {
+  font-size: 36px;
+}
+
+.ticket-add-modal .ticket-total-side {
+  font-size: 14px;
+}
+
+.ticket-add-modal .btn-cancel {
+  min-width: 90px;
+}
+
+.ticket-add-modal .btn-submit {
+  min-width: 180px;
+}
+
 .ticket-hint {
   font-size: 12px;
   color: #888;
