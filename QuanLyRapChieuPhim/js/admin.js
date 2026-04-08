@@ -1,3 +1,11 @@
+(function () {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser || (currentUser.role !== "admin" && currentUser.email !== "admin@rikkei.edu.vn")) {
+    // Thử dùng đường dẫn đơn giản nhất nếu 2 file ở cùng thư mục pages
+    window.location.replace("../pages/login.html");
+  }
+})();
+
 const KEY = "rikkei_movies";
 let movies = JSON.parse(localStorage.getItem(KEY)) || [];
 let currentPage = 1;
@@ -670,89 +678,32 @@ function renderTable() {
 function renderPagination(filtered) {
   const total = Math.ceil(filtered.length / perPage);
   const controls = document.getElementById("paginationControls");
+  
+  if (!controls) return;
+  
   controls.innerHTML = "";
 
   if (total <= 1) return;
 
-  const prev = document.createElement("button");
-  prev.className = "pagination-btn pagination-prev";
-  prev.innerHTML = '<i class="fas fa-chevron-left"></i>';
-  prev.disabled = currentPage === 1;
-  prev.onclick = function () {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTable();
-      window.scrollTo(0, 0);
-    }
-  };
-  controls.appendChild(prev);
-
-  if (currentPage > 3) {
-    const first = document.createElement("button");
-    first.className = "pagination-btn";
-    first.textContent = "1";
-    first.onclick = function () {
-      currentPage = 1;
-      renderTable();
-      window.scrollTo(0, 0);
-    };
-    controls.appendChild(first);
-
-    if (currentPage > 4) {
-      const dots = document.createElement("span");
-      dots.className = "dots";
-      dots.textContent = "...";
-      controls.appendChild(dots);
-    }
-  }
-
-  const start = Math.max(1, currentPage - 1);
-  const end = Math.min(total, currentPage + 1);
-
-  Array.from({ length: end - start + 1 }, (_, index) => start + index).forEach((pageNumber) => {
+  for (let i = 1; i <= total; i++) {
     const btn = document.createElement("button");
     btn.className = "pagination-btn";
-    if (pageNumber === currentPage) btn.classList.add("active");
-    btn.textContent = pageNumber;
+    
+    if (i === currentPage) {
+      btn.classList.add("active");
+    }
+    
+    btn.textContent = i;
+    
+    // Xử lý sự kiện khi nhấn vào số trang
     btn.onclick = function () {
-      currentPage = pageNumber;
+      currentPage = i;
       renderTable();
       window.scrollTo(0, 0);
     };
+    
     controls.appendChild(btn);
-  });
-
-  if (currentPage < total - 2) {
-    if (currentPage < total - 3) {
-      const dots = document.createElement("span");
-      dots.className = "dots";
-      dots.textContent = "...";
-      controls.appendChild(dots);
-    }
-
-    const last = document.createElement("button");
-    last.className = "pagination-btn";
-    last.textContent = total;
-    last.onclick = function () {
-      currentPage = total;
-      renderTable();
-      window.scrollTo(0, 0);
-    };
-    controls.appendChild(last);
   }
-
-  const next = document.createElement("button");
-  next.className = "pagination-btn pagination-next";
-  next.innerHTML = '<i class="fas fa-chevron-right"></i>';
-  next.disabled = currentPage === total;
-  next.onclick = function () {
-    if (currentPage < total) {
-      currentPage++;
-      renderTable();
-      window.scrollTo(0, 0);
-    }
-  };
-  controls.appendChild(next);
 }
 
 // Hàm dùng để đổi ngày dạng YYYY-MM-DD sang DD/MM/YYYY để hiển thị.
@@ -840,7 +791,7 @@ function addMovie() {
     price: parsePriceNumber(formData.price),
   };
 
-  movies.unshift(movie);
+  movies.push(movie);
   saveMovies();
   closeAddModal();
   currentPage = 1;
@@ -1226,12 +1177,38 @@ const hasSeatConflict = (movieId, showDate, showTime, seats) => {
   });
 };
 
+// Hàm dùng để kiểm tra suất chiếu còn hiệu lực (trong tương lai hoặc đang diễn ra).
+const isShowTimeBookable = (showDate, showTime, movieDurationMinutes) => {
+  if (!showDate || !showTime) return false;
+  const showStart = new Date(`${showDate}T${showTime}:00`);
+  if (Number.isNaN(showStart.getTime())) return false;
+  const duration = Number(movieDurationMinutes) || 120;
+  const showEnd = new Date(showStart.getTime() + duration * 60 * 1000);
+  const now = new Date();
+  return now <= showEnd;
+};
+
 // Hàm dùng để đổ danh sách khách từ localStorage vào ô chọn khách (form thêm vé).
 const fillCustomerSelect = () => {
   const customerSelect = document.getElementById("ticketAddCustomer");
   if (!customerSelect) return;
 
-  const users = JSON.parse(localStorage.getItem("users")) || [];
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  if (users.length === 0) {
+    users = [
+      {
+        id: Date.now(),
+        fullName: "Khách vãng lai",
+        email: "khachvanglai@example.com",
+        phone: "0900000000",
+        role: "user",
+        createdAt: new Date().toISOString(),
+        isActive: true,
+      },
+    ];
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+
   customerSelect.innerHTML = '<option value="">-- Chọn khách --</option>';
 
   users.forEach((user) => {
@@ -1301,6 +1278,24 @@ const updateTicketAddTotal = () => {
     formatMoneyTicket(totalAmount);
   document.getElementById("ticketAddSeatBreakdown").textContent =
     `${seatList.length} vé x ${unitPrice.toLocaleString("vi-VN")} đ`;
+};
+
+// Hàm dùng để reset toàn bộ form thêm vé.
+const resetAddTicketForm = () => {
+  const customer = document.getElementById("ticketAddCustomer");
+  const movie = document.getElementById("ticketAddMovie");
+  const show = document.getElementById("ticketAddShow");
+  const seats = document.getElementById("ticketAddSeats");
+  const payMethod = document.getElementById("ticketAddPayMethod");
+  const payStatus = document.getElementById("ticketAddPayStatus");
+
+  if (customer) customer.value = "";
+  if (movie) movie.value = "";
+  if (show) show.value = "";
+  if (seats) seats.value = "";
+  if (payMethod) payMethod.value = "";
+  if (payStatus) payStatus.value = "1";
+  updateTicketAddTotal();
 };
 
 // Hàm dùng để cập nhật các số thống kê trên tab vé (vé hôm nay, doanh thu, chờ xử lý).
@@ -1385,7 +1380,7 @@ const renderTicketTable = () => {
     html += `<span class="ticket-money">${formatMoneyTicket(ticket.totalAmount)}</span>`;
     html += `<span><span class="ticket-pill ${statusClass}">${ticket.statusDisplay}</span></span>`;
     html += '<span class="ticket-actions-cell">';
-    html += `<button type="button" onclick="${ticket.id}" title="Sửa vé"><i class="fa-solid fa-pen"></i></button>`;
+    html += `<button type="button" onclick="openEditTicketModal(${ticket.id})" title="Sửa vé"><i class="fa-solid fa-pen"></i></button>`;
     html += `<button type="button" onclick="openCancelTicketModal(${ticket.id})" title="Hủy vé"><i class="fa-regular fa-circle-xmark"></i></button>`;
     html += "</span></div>";
   });
@@ -1405,44 +1400,29 @@ const renderTicketTable = () => {
 const renderTicketPagination = (totalItems) => {
   const totalPages = Math.ceil(totalItems / ticketPerPage);
   const controls = document.getElementById("ticketPaginationControls");
+  
+  if (!controls) return;
   controls.innerHTML = "";
+  
   if (totalPages <= 1) return;
-
-  const prevButton = document.createElement("button");
-  prevButton.className = "pagination-btn pagination-prev";
-  prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
-  prevButton.disabled = ticketPage === 1;
-  prevButton.onclick = () => {
-    if (ticketPage > 1) {
-      ticketPage -= 1;
-      renderTicketTable();
-    }
-  };
-  controls.appendChild(prevButton);
 
   Array.from({ length: totalPages }, (_, index) => index + 1).forEach((pageNumber) => {
     const pageButton = document.createElement("button");
     pageButton.className = "pagination-btn";
     pageButton.textContent = pageNumber;
-    if (pageNumber === ticketPage) pageButton.classList.add("active");
+    
+    if (pageNumber === ticketPage) {
+        pageButton.classList.add("active");
+    }
+
     pageButton.onclick = () => {
       ticketPage = pageNumber;
       renderTicketTable();
+      window.scrollTo(0, 0); 
     };
+    
     controls.appendChild(pageButton);
   });
-
-  const nextButton = document.createElement("button");
-  nextButton.className = "pagination-btn pagination-next";
-  nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-  nextButton.disabled = ticketPage === totalPages;
-  nextButton.onclick = () => {
-    if (ticketPage < totalPages) {
-      ticketPage += 1;
-      renderTicketTable();
-    }
-  };
-  controls.appendChild(nextButton);
 };
 
 // Hàm dùng để gán nội dung ô tìm kiếm vé và vẽ lại bảng.
@@ -1453,15 +1433,21 @@ const searchTickets = (value) => {
 };
 
 // -------- CHỨC NĂNG THÊM MỚI VÉ --------
-// Hàm dùng để (khi bật lại) mở modal thêm vé; hiện chỉ báo chức năng chưa được
+// Hàm dùng để mở modal thêm vé.
 const openAddTicketModal = () => {
-  showAlert("Chức năng thêm vé sẽ phát triển sau", "info");
+  fillCustomerSelect();
+  fillTicketMovieSelects();
+  fillShowSelect(document.getElementById("ticketAddShow"), "");
+  clearTicketAddFormErrors();
+  resetAddTicketForm();
+  document.getElementById("addTicketModal").style.display = "flex";
 };
 
 // Hàm dùng để đóng modal thêm vé và xóa lỗi validate trên form.
 const closeAddTicketModal = () => {
   document.getElementById("addTicketModal").style.display = "none";
   clearTicketAddFormErrors();
+  resetAddTicketForm();
 };
 
 // Hàm dùng để map tên trường logic sang id ô input trong HTML (form thêm vé).
@@ -1573,19 +1559,59 @@ const onTicketAddInputMaybeClearError = (event) => {
 const validateTicketAddForm = (formData) => {
   const errors = {};
   if (!formData.customerValue) {
-    errors.customer = "Vui lòng chọn khách hàng";
+    errors.customer = "Khách hàng không được để trống";
   }
   if (!formData.movieId) {
-    errors.movie = "Vui lòng chọn phim";
+    errors.movie = "Phim không được để trống";
+  } else {
+    const isShowingMovie = getShowingMovies().some(
+      (movie) => String(movie.id) === String(formData.movieId),
+    );
+    if (!isShowingMovie) {
+      errors.movie = "Chỉ được chọn phim đang chiếu";
+    }
   }
   if (!formData.showValue) {
-    errors.show = "Vui lòng chọn suất chiếu";
+    errors.show = "Suất chiếu không được để trống";
+  } else {
+    const validShowValues = getShowOptionsForMovie(Number(formData.movieId)).map(
+      (show) => `${show.showDate}|${show.showTime}`,
+    );
+    if (!validShowValues.includes(formData.showValue)) {
+      errors.show = "Suất chiếu phải thuộc phim đã chọn";
+    }
   }
   if (!formData.seatText.trim()) {
-    errors.seats = "Vui lòng nhập ghế";
+    errors.seats = "Ghế không được để trống";
+  } else if (!isSeatFormatValid(formData.seatList)) {
+    errors.seats = "Ghế không đúng định dạng (ví dụ: F12, F13)";
+  } else {
+    const uniqueSeats = new Set(formData.seatList);
+    if (uniqueSeats.size !== formData.seatList.length) {
+      errors.seats = "Danh sách ghế đang bị trùng";
+    }
+    if (
+      !errors.seats &&
+      hasSeatConflict(formData.movieId, formData.showDate, formData.showTime, formData.seatList)
+    ) {
+      errors.seats = "Ghế đã có người đặt cho suất chiếu này";
+    }
   }
   if (!formData.payMethod) {
-    errors.paymentMethod = "Vui lòng chọn phương thức thanh toán";
+    errors.paymentMethod = "Phương thức thanh toán không được để trống";
+  }
+
+  if (!formData.selectedMovie) {
+    errors.movie = errors.movie || "Phim không hợp lệ";
+  } else if (
+    !isShowTimeBookable(formData.showDate, formData.showTime, formData.selectedMovie.duration)
+  ) {
+    errors.show = "Ngày/giờ suất chiếu đã qua, vui lòng chọn suất khác";
+  }
+
+  const expectedTotal = formData.seatList.length * (formData.selectedMovie?.price || 0);
+  if (expectedTotal <= 0) {
+    errors.seats = errors.seats || "Không thể tính tổng tiền từ ghế đã nhập";
   }
   return errors;
 };
@@ -1596,15 +1622,85 @@ const generateNextTicketId = () => {
   return maxId + 1;
 };
 
-// Hàm dùng để (khi bật lại) lưu vé mới từ form; hiện chỉ báo chức năng đang tắt.
+// Hàm dùng để lưu vé mới từ form.
 const saveNewTicket = () => {
-  showAlert("Chức năng thêm vé đang tạm tắt theo yêu cầu dự án.", "info");
+  const customerValue = document.getElementById("ticketAddCustomer").value;
+  const movieId = Number(document.getElementById("ticketAddMovie").value);
+  const showValue = document.getElementById("ticketAddShow").value;
+  const seatText = document.getElementById("ticketAddSeats").value;
+  const payMethod = document.getElementById("ticketAddPayMethod").value;
+  const payStatus = document.getElementById("ticketAddPayStatus").value;
+
+  const [showDate = "", showTime = ""] = showValue.split("|");
+  const seatList = parseSeatString(seatText);
+  const selectedMovie = movies.find((movie) => movie.id === movieId);
+  const [customerName = "", customerPhone = ""] = customerValue.split("|");
+  const expectedTotal = seatList.length * (selectedMovie?.price || 0);
+
+  const formData = {
+    customerValue,
+    movieId,
+    showValue,
+    showDate,
+    showTime,
+    seatText,
+    seatList,
+    payMethod,
+    payStatus,
+    selectedMovie,
+    expectedTotal,
+  };
+
+  const errors = validateTicketAddForm(formData);
+  if (Object.keys(errors).length > 0) {
+    showTicketAddFormErrors(errors);
+    return;
+  }
+
+  const nextId = generateNextTicketId();
+  const newTicket = {
+    id: nextId,
+    ticketCode: `VE-${nextId}`,
+    customerName: customerName.trim(),
+    customerPhone: customerPhone.trim(),
+    movieId: selectedMovie.id,
+    movieTitle: selectedMovie.name,
+    showDate,
+    showTime,
+    seats: seatList,
+    seatCount: seatList.length,
+    pricePerSeat: selectedMovie.price,
+    totalAmount: expectedTotal,
+    paymentMethod: Number(payMethod),
+    paymentStatus: payStatus === "1",
+    createdAt: new Date().toISOString(),
+    note: "",
+    statusDisplay: payStatus === "1" ? "Đã Thanh Toán" : "Chờ xử lý",
+    cancelled: false,
+  };
+
+  tickets.unshift(newTicket);
+  saveTickets();
+  closeAddTicketModal();
+  ticketPage = 1;
+  ticketSearchText = "";
+  const ticketSearchInput = document.getElementById("ticketSearchInput");
+  if (ticketSearchInput) {
+    ticketSearchInput.value = "";
+  }
+  updateTicketStats();
+  renderTicketTable();
+  showAlert("Đặt vé thành công!", "success");
 };
 
-// -------- CHỨC NĂNG CẬP NHẬT VÉ (ĐANG TẠM TẮT) --------
-// Hàm dùng để (khi bật lại) mở modal sửa vé; hiện chỉ báo chức năng đang tắt.
-const openEditTicketModal = () => {
-  showAlert("Chức năng cập nhật vé đang tạm tắt theo yêu cầu dự án.", "info");
+// -------- CHỨC NĂNG CẬP NHẬT VÉ --------
+const openEditTicketModal = (id) => {
+  const selectedTicket = tickets.find((ticket) => ticket.id === id);
+  if (selectedTicket && selectedTicket.paymentStatus) {
+    showAlert("Vé đã thanh toán: không cho đổi phim/suất chiếu.", "warning");
+    return;
+  }
+  showAlert("Chức năng cập nhật vé sẽ được phát triển sau", "info");
 };
 
 // Hàm dùng để đóng modal sửa vé (giữ trong HTML gọi onclick).
@@ -1751,5 +1847,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ["input", "change"].forEach((eventName) => {
       addTicketModal.addEventListener(eventName, onTicketAddInputMaybeClearError);
     });
+  }
+});
+
+// Chống lại BF Cache (Back-Forward Cache) của trình duyệt
+window.addEventListener("pageshow", function (event) {
+  // event.persisted = true nghĩa là trang được lôi ra từ bộ nhớ đệm (khi ấn Back)
+  if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+    // Ép trình duyệt phải tải lại trang hoàn toàn
+    window.location.reload();
   }
 });
